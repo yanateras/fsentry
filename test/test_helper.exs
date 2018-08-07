@@ -1,0 +1,2 @@
+FSentry.load()
+ExUnit.start()
