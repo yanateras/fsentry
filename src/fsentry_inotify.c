@@ -83,7 +83,7 @@ void ready_input(ErlDrvData data, ErlDrvEvent event) {
     while (ptr < buf + n) {
       struct inotify_event *if_event = (struct inotify_event *)ptr;
 
-      ErlDrvBinary *name = driver_alloc_binary(if_event->len - 1);
+      ErlDrvBinary *name = driver_alloc_binary(strlen(if_event->name));
       memcpy(name->orig_bytes, &if_event->name, name->orig_size);
 
       ErlDrvTermData term[] = {
