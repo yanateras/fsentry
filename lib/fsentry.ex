@@ -23,6 +23,7 @@ defmodule FSentry do
     receive do
       {^port, path, message} ->
         send(pid, {self(), path, message})
+
       :stop ->
         exit(:stop)
     end

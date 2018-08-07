@@ -6,7 +6,6 @@ defmodule FSentry.MixProject do
       app: :fsentry,
       version: "0.0.0",
       aliases: ["compile.fsentry": &compile/1]
-      #      compilers: Mix.compilers() ++ [:fsentry]
     ]
   end
 

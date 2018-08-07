@@ -3,8 +3,7 @@ defmodule FSentryTest do
 
   def all_messages do
     receive do
-      message ->
-        [message | all_messages()]
+      message -> [message | all_messages()]
     after
       0 -> []
     end
@@ -19,9 +18,11 @@ defmodule FSentryTest do
     File.write!(tmp_file, "")
     File.rm!(tmp_file)
 
-    assert [{_, "fsentry", :create},
-	    {_, "fsentry", :modify},
-	    {_, "fsentry", :delete}] = all_messages()
+    assert [
+             {_, "fsentry", :create},
+             {_, "fsentry", :modify},
+             {_, "fsentry", :delete}
+           ] = all_messages()
 
     FSentry.stop(pid)
   end
