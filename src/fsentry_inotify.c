@@ -31,7 +31,8 @@ static ErlDrvData start(ErlDrvPort port, char *command) {
     return ERL_DRV_ERROR_ERRNO;
   }
 
-  state->wd = inotify_add_watch(state->fd, command, IN_ALL_EVENTS);
+  // TODO: event list is currently limited for future compatibility w/ Windows and BSDs
+  state->wd = inotify_add_watch(state->fd, command, IN_CREATE | IN_DELETE | IN_MODIFY);
 
   if (state->wd == -1) {
     close(state->fd);
@@ -53,16 +54,12 @@ static void stop(ErlDrvData data) {
 }
 
 char *inotify_event_to_string(struct inotify_event *i) {
-  if (i->mask & IN_ACCESS)
-    return "access";
   if (i->mask & IN_CREATE)
     return "create";
   if (i->mask & IN_DELETE)
     return "delete";
   if (i->mask & IN_MODIFY)
     return "modify";
-  if (i->mask & IN_OPEN)
-    return "open";
 
   return "unknown";
 }
