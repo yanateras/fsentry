@@ -4,9 +4,19 @@ defmodule FSentry.MixProject do
   def project do
     [
       app: :fsentry,
-      version: "0.0.0",
-      aliases: ["compile.fsentry": &compile/1]
+      version: "0.1.0",
+      aliases: ["compile.fsentry": &compile/1],
+      compilers: [:fsentry] ++ Mix.compilers(),
+      deps: [
+        {:dialyxir, "~> 0.5", only: :dev, runtime: false},
+        {:ex_doc, "~> 0.18.0", only: :dev, runtime: false}
+      ],
+      links: %{"GitHub" => "https://github.com/serokell/fsentry"}
     ]
+  end
+
+  def application do
+    [mod: {FSentry.Application, []}]
   end
 
   def compile(_) do
@@ -16,8 +26,8 @@ defmodule FSentry.MixProject do
     args = ["-shared", "-I#{include}", "src/fsentry_inotify.c", "-o", "priv/fsentry.so"]
 
     case System.cmd("cc", args) do
-      0 -> :ok
-      _ -> {:error, []}
+      {_, 0} -> :ok
+      {_, _} -> Mix.raise("could not build fsentry port driver")
     end
   end
 end

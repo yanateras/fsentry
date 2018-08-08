@@ -4,6 +4,7 @@
 
 #include <sys/inotify.h>
 
+// http://erlang.org/doc/man/erl_driver.html
 #include "erl_driver.h"
 
 #define BUFLEN (NAME_MAX + 1 + sizeof(struct inotify_event)) * 16

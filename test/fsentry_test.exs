@@ -10,13 +10,13 @@ defmodule FSentryTest do
   end
 
   test "create/modify/delete events go through" do
-    tmp_dir = System.tmp_dir!()
-    {:ok, pid} = FSentry.start(tmp_dir)
-    tmp_file = Path.join(tmp_dir, "fsentry")
+    tmp = System.tmp_dir!()
+    pid = FSentry.start!(tmp)
+    tmp = Path.join(tmp, "fsentry")
 
-    File.touch!(tmp_file)
-    File.write!(tmp_file, "")
-    File.rm!(tmp_file)
+    File.touch!(tmp)
+    File.write!(tmp, "")
+    File.rm!(tmp)
 
     assert [
              {_, "fsentry", :create},
