@@ -5,8 +5,11 @@ FSentry is an Elixir module for spawning FS sentries. It is implemented as a
 
 [port driver]: http://erlang.org/doc/tutorial/c_portdriver.html
 
-Currently, only Inotify backend is implemented, although Kqueue and Win32
-implementations are planned.
+Based on Inotify. macOS and BSD users should install [libinotify-kqueue][],
+Windows users are currently out of luck (although it would be nice to have a
+Win32 Inotify implementation).
+
+[libinotify-kqueue]: https://github.com/libinotify-kqueue/libinotify-kqueue
 
 Unlike [synrc/fs](https://github.com/synrc/fs), FSentry doesn't spawn external
 processes and doesn't have any runtime dependencies. It also can listen on
