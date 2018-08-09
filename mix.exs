@@ -11,7 +11,12 @@ defmodule FSentry.MixProject do
         {:dialyxir, "~> 0.5", only: :dev, runtime: false},
         {:ex_doc, "~> 0.18.0", only: :dev, runtime: false}
       ],
-      links: %{"GitHub" => "https://github.com/serokell/fsentry"}
+      package: [
+        description: "Efficient Inotify-based file system sentry",
+        files: ["lib", "mix.exs"],
+        licenses: ["CC0-1.0"],
+        links: %{"GitHub" => "https://github.com/serokell/fsentry"}
+      ]
     ]
   end
 
