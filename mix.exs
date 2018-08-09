@@ -89,8 +89,8 @@ defmodule FSentry.MixProject do
   """
   def compile(_args) do
     case System.cmd("cc", compile_args()) do
-      {_, 0} -> :ok
-      {_, _} -> Mix.raise("could not build FSentry port driver")
+      {_output, 0} -> :ok
+      {_output, _status} -> Mix.raise("could not build FSentry port driver")
     end
   end
 end

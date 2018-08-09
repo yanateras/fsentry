@@ -5,14 +5,14 @@ defmodule FSentry.Application do
 
   @behaviour Application
 
-  def start(_, _) do
+  def start(_type, _args) do
     case FSentry.load() do
       :ok -> {:ok, spawn_link(&loop/0)}
       err -> err
     end
   end
 
-  def stop(_) do
+  def stop(_state) do
     :ok
   end
 
