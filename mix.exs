@@ -5,7 +5,7 @@ defmodule FSentry.MixProject do
     [
       app: :fsentry,
       version: "0.1.0",
-      aliases: ["compile.fsentry": &compile/1],
+      aliases: ["compile.fsentry": &compile_lazy/1],
       compilers: [:fsentry] ++ Mix.compilers(),
       deps: [
         {:dialyxir, "~> 0.5", only: :dev, runtime: false},
@@ -74,23 +74,38 @@ defmodule FSentry.MixProject do
     Path.join([:code.root_dir(), ["erts-", :erlang.system_info(:version)], "/include"])
   end
 
-  @spec compile_args :: [String.t()]
-  def compile_args do
-    [
-      "-I" <> erts_headers(),
-      ensure_path("src", "fsentry.c"),
-      "-o",
-      ensure_path("priv", "fsentry.so")
-    ] ++ native_deps() ++ shared_library()
+  @doc """
+    Return path modification time.
+  """
+  @spec mtime(Path.t()) :: Integer.t()
+  def mtime(path) do
+    File.stat!(path).mtime
   end
 
   @doc """
-    Build FSentry port driver.
+    Compile FSentry port driver only if source is newer than target.
   """
-  def compile(_args) do
-    case System.cmd("cc", compile_args()) do
+  def compile_lazy(_args) do
+    source = ensure_path("src", "fsentry.c")
+    target = ensure_path("priv", "fsentry.so")
+
+    unless File.exists?(target) && mtime(source) < mtime(target) do
+      compile(source, target)
+    end
+
+    :ok
+  end
+
+  @spec compile_args(Path.t(), Path.t()) :: [String.t()]
+  def compile_args(source, target) do
+    ["-I" <> erts_headers(), source, "-o", target] ++ native_deps() ++ shared_library()
+  end
+
+  @spec compile(Path.t(), Path.t()) :: :ok
+  def compile(source, target) do
+    case System.cmd("cc", compile_args(source, target)) do
       {_output, 0} -> :ok
-      {_output, _status} -> Mix.raise("could not build FSentry port driver")
+      {_output, _status} -> Mix.raise("could not build #{source}")
     end
   end
 end
