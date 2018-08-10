@@ -41,7 +41,7 @@ defmodule FSentry.MixProject do
   @spec pkg_config(String.t()) :: [String.t()]
   def pkg_config(module) do
     case System.cmd("pkg-config", ["--cflags", "--libs", module]) do
-      {output, 0} -> OptionParser.split(output)
+      {output, 0} -> OptionParser.split(String.trim(output))
       {_output, _status} -> Mix.raise("could not use pkg-config module '#{module}'")
     end
   end
