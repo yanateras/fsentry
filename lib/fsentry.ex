@@ -25,10 +25,9 @@ defmodule FSentry do
   @doc """
     Stop sentry by PID.
   """
-  @spec stop(pid()) :: :ok
+  @spec stop(pid()) :: no_return()
   def stop(pid) do
     send(pid, :stop)
-    :ok
   end
 
   # Create port driver instance listening on given path.
